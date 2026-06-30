@@ -1,4 +1,11 @@
-WITH src_airports_comments AS (
+
+{{
+    config(
+        materialized = 'ephemeral',
+    )
+}}
+
+WITH raw_airports_comments AS (
     select * from {{ source('airstats', 'comments') }}
 )
 
@@ -9,4 +16,4 @@ SELECT
     member_nickname,
     subject AS comment_subject,
     body AS comment_body
-FROM src_airports_comments
+FROM raw_airports_comments

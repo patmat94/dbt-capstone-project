@@ -1,4 +1,10 @@
-WITH src_airports AS (
+{{
+    config(
+        materialized = 'ephemeral',
+    )
+}}
+
+WITH raw_airports AS (
     select * from {{ source('airstats', 'airports')}}
 )
 
@@ -11,4 +17,4 @@ SELECT
     continent,
     iso_country,
     iso_region
-FROM src_airports
+FROM raw_airports

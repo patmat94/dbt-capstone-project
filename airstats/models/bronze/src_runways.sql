@@ -1,4 +1,10 @@
-WITH src_runways AS (
+{{
+    config(
+        materialized = 'ephemeral',
+    )
+}}
+
+WITH raw_runways AS (
     select * from {{ source('airstats', 'runways') }}
 )
 
@@ -10,4 +16,4 @@ SELECT
     surface AS runway_surface,
     lighted AS runway_lighted,
     closed AS runway_closed
-FROM src_runways
+FROM raw_runways

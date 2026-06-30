@@ -253,17 +253,19 @@ Add a new record to `RAW.airport_comments`. Then materialize the incremental mod
 Add your solution in the next lines:
 * Adding a new record:
   ```
-  REPLACE THIS CODE BLOCK BY PASTING THE SQL for adding a new record to `RAW.airport_comments`
+  INSERT INTO AIRSTATS.RAW.AIRPORT_COMMENTS (ID, THREAD_REF, AIRPORT_REF, AIRPORT_IDENT, DATE, MEMBER_NICKNAME, SUBJECT, BODY, LOADED_AT)
+  VALUES (666666, 66666, 012345, 'CA-0178', CURRENT_TIMESTAMP(), 'Yoloslaw', 'TESTING', 'Insert record for testing incremental table', CURRENT_TIMESTAMP());
   ```
 * Command to execute to update this model (but only this model, not all the models):
   ```
-  REPLACE THIS CODE BLOCK BY PASTING THE dbt COMMAND YOU EXECUTED
+  dbt run --select silver_airport_comments
   ``` 
 * Execute an SQL on the Snowflake UI to ensure the new record has been added:
   ```
-  REPLACE THIS CODE BLOCK BY PASTING 
-  1) THE SQL to extract the new record from `silver_airport_comments`
-  2) THE result you see in Snowflake
+  1) SELECT * FROM airstats.dev.silver_airport_comments ORDER BY LOADED_AT DESC LIMIT 1;
+  2) COMMENT_ID	| AIRPORT_IDENT |	COMMENT_TIMESTAMP |	MEMBER_NICKNAME |	COMMENT_SUBJECT |	COMMENT_BODY | LOADED_AT
+      666666 |	CA-0178	| 30.06.2026 02:50 |	Yoloslaw |	TESTING |	Insert record for testing incremental table |	30.06.2026 02:53
+
   ``` 
 
 **Requirements** 
