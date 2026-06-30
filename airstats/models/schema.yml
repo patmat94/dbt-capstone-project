@@ -109,7 +109,7 @@ models:
         data_tests:
           - not_null
       - name: comment_body
-        description: "The body of the comment"
+        description: '{{ doc("silver_airport_comments_comment_body") }}'
         data_tests:
           - dbt_expectations.expect_column_values_to_be_of_type:
                 column_type: varchar
