@@ -217,4 +217,4 @@ dbt_internal_packages/
 package-lock.yml
 logs/
 
-/airstats
+# /airstats
