@@ -1,0 +1,115 @@
+models:
+  - name: silver_airports
+    description: "This model is used to store the silver_airports table"
+    columns:
+      - name: airport_ident
+        description: "The identifier of the airport"
+        data_tests:
+          - dbt_expectations.expect_column_to_exist
+          - not_null
+          - unique
+      - name: airport_name
+        description: "The name of the airport"
+        data_tests:
+          - not_null
+      - name: airport_lat
+        description: "The latitude of the airport"
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: -90
+                max_value: 90
+      - name: airport_long
+        description: "The longitude of the airport"
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: -180
+                max_value: 180
+      - name: continent
+        description: "The continent of the airport"
+        data_tests:
+          - not_null
+      - name: iso_country
+        description: "The country of the airport"
+        data_tests:
+          - not_null
+      - name: iso_region
+        description: "The region of the airport"
+        data_tests:
+          - not_null
+      - name: airport_type
+        description: "The type of the airport"
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["balloonport", "closed", "heliport", "large_airport", "medium_airport", "seaplane_base", "small_airport"]
+
+  - name: silver_runways
+    description: "This model is used to store the silver_runways table"
+    columns:
+      - name: runway_id
+        description: "The identifier of the runway"
+        data_tests:
+          - not_null
+          - unique
+      - name: airport_ident
+        description: "The identifier of the airport"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('silver_airports')
+                field: airport_ident
+                severity: warn
+      - name: runway_surface
+        description: "The surface of the runway"
+        data_tests:
+          - not_null
+      - name: runway_lighted
+        description: "Whether the runway is lighted"
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 0]
+      - name: runway_closed
+        description: "Whether the runway is closed"
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 0]
+
+  - name: silver_airport_comments
+    description: "This model is used to store the silver_airport_comments table"
+    columns:
+      - name: comment_id
+        description: "The identifier of the comment"
+        data_tests:
+          - not_null
+          - unique
+      - name: airport_ident
+        description: "The identifier of the airport"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('silver_airports')
+                field: airport_ident
+                severity: warn
+      - name: comment_timestamp
+        description: "The timestamp of the comment"
+        data_tests:
+          - not_null
+      - name: member_nickname
+        description: "The nickname of the member"
+        data_tests:
+          - not_null
+      - name: comment_body
+        description: "The body of the comment"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+                column_type: varchar

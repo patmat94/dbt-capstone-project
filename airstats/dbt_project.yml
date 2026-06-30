@@ -27,6 +27,10 @@ models:
     silver:
       +materialized: table
 
+data_tests:
+  +store_failures: true
+  +schema: _test_failures
+
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
